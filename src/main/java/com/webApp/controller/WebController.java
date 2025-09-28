@@ -20,6 +20,7 @@ public class WebController {
 		List<String> list = new ArrayList<>();
 		list.add("hello this is from jenkins");
 		list.add("this is our first jenkins project ");
+		list.add("Application is successfully deployed");
 		return list;
 	}
 }
