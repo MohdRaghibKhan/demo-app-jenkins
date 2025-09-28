@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class WebController {
+public class WebController { 
 
 	@GetMapping("/hello")
 	public List<String> getData() {
