@@ -1,25 +1,37 @@
 pipeline {
     agent any
+    environment {
+        CATALINA_HOME = '/opt/tomcat'
+    }
     stages {
         stage('Build') {
             steps {
+                echo 'Building the Maven project...'
                 sh 'mvn clean package'
             }
         }
         stage('Deploy') {
             steps {
-                // Stop Tomcat
-                sh 'sudo /opt/tomcat/bin/shutdown.sh || true'
+                echo 'Stopping Tomcat...'
+                sh 'sudo ${CATALINA_HOME}/bin/shutdown.sh || true'
 
-                // Remove old WAR and exploded directory
-                sh 'sudo rm -rf /opt/tomcat/webapps/webapp-jenkins*'
+                echo 'Cleaning old deployments...'
+                sh 'sudo rm -rf ${CATALINA_HOME}/webapps/webapp-jenkins*'
 
-                // Deploy new WAR
-                sh 'sudo cp target/webapp-jenkins.war /opt/tomcat/webapps/'
+                echo 'Deploying new WAR...'
+                sh 'sudo cp target/webapp-jenkins.war ${CATALINA_HOME}/webapps/'
 
-                // Start Tomcat
-                sh 'sudo /opt/tomcat/bin/startup.sh'
+                echo 'Starting Tomcat...'
+                sh 'sudo ${CATALINA_HOME}/bin/startup.sh'
             }
+        }
+    }
+    post {
+        success {
+            echo 'Deployment successful! App should be running on http://localhost:8081/webapp-jenkins/api/hello'
+        }
+        failure {
+            echo 'Build or deployment failed. Check the logs.'
         }
     }
 }
