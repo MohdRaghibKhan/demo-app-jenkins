@@ -8,7 +8,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'cp target/webapp-jenkins.war /opt/tomcat10/webapp-jenkins/'
+                sh 'cp target/webapp-jenkins.war /opt/tomcat10/webapps/'
             }
         }
     }
